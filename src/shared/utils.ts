@@ -1,6 +1,3 @@
-import fs from "fs/promises";
-import { Result } from "./types";
-
 export const handleError = (error: unknown): never => {
   console.error(error);
   process.exit(1);
