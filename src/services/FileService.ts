@@ -3,6 +3,8 @@ import { Result } from "../shared/types";
 
 type FileOperation<T> = () => T;
 
+type AsyncFileOperation<T> = () => Promise<T>;
+
 export class FileService {
   read(path: string): Result<string> {
     return this.handleOperation(
@@ -33,6 +35,13 @@ export class FileService {
     }, "Błąd zapisu obrazu");
   }
 
+  async ensureDirectory(dirPath: string): Promise<Result<void>> {
+    return this.handleAsyncOperation(async () => {
+      await fs.promises.rm(dirPath, { recursive: true, force: true });
+      await fs.promises.mkdir(dirPath, { recursive: true });
+    }, "Błąd tworzenia katalogu");
+  }
+
   private handleOperation<T>(
     operation: FileOperation<T>,
     errorPrefix: string
@@ -40,6 +49,22 @@ export class FileService {
     try {
       const result = operation();
 
+      return { data: result };
+    } catch (error) {
+      return {
+        error: `${errorPrefix}: ${
+          error instanceof Error ? error.message : "FileService: Nieznany błąd"
+        }`,
+      };
+    }
+  }
+
+  private async handleAsyncOperation<T>(
+    operation: AsyncFileOperation<T>,
+    errorPrefix: string
+  ): Promise<Result<T>> {
+    try {
+      const result = await operation();
       return { data: result };
     } catch (error) {
       return {
