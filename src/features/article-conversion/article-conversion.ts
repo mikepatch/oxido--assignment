@@ -2,6 +2,7 @@ import { Result } from "../../shared/types";
 import { OpenAIService } from "../../services/OpenAIService";
 import { CONVERT_TO_HTML_PROMPT } from "../../prompts/convertToHtmlPrompt";
 import { ENRICH_HTML_WITH_IMAGES_PROMPT } from "../../prompts/enrichHtmlWithImagesPrompt";
+import { APP_CONFIG } from "../../../config";
 
 const openai = new OpenAIService();
 
@@ -21,6 +22,7 @@ const processWithOpenAI = async (
       { role: "system", content: prompt },
       { role: "user", content: content },
     ],
+    model: APP_CONFIG.articleToHtml.completionModel,
   });
   if (completion.error) return { error: completion.error };
 
