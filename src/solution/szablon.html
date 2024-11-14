@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      :root {
+        --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --primary-color: #333;
+        --bg-color: #f0f2f5;
+        --card-bg: #ffffff;
+        --heading-color: #4a5568;
+        --caption-color: #718096;
+        --muted-color: #a0aec0;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --border-radius: 0.2rem;
+        --img-height: 500px;
+        --img-height-mobile: 400px;
+
+        --dark-bg: #1a202c;
+        --dark-text: #e2e8f0;
+        --dark-card: #2d3748;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--primary-color);
+        font-family: var(--font-family);
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+      }
+
+      article {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-md), var(--shadow-sm);
+        margin: 2rem auto;
+        max-width: 1024px;
+        overflow: hidden;
+      }
+
+      header {
+        background: var(--primary-gradient);
+        color: #ffffff;
+        padding: 2rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        line-height: 1.2;
+      }
+
+      section {
+        padding: 2rem 3rem;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+        color: var(--heading-color);
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        position: relative;
+      }
+
+      h2::after {
+        content: "";
+        display: block;
+        width: 50px;
+        height: 4px;
+        background: var(--primary-gradient);
+        margin-top: 0.5rem;
+      }
+
+      p {
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+      }
+
+      figure {
+        margin: 2rem 0;
+        text-align: center;
+      }
+
+      img {
+        width: 100%;
+        height: var(--img-height);
+        object-fit: cover;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-md);
+        transition: transform 0.3s ease;
+      }
+
+      figcaption {
+        font-style: italic;
+        color: var(--caption-color);
+        margin-top: 0.75rem;
+        font-size: 0.9rem;
+      }
+
+      footer {
+        padding: 1.5rem 2rem;
+        font-size: 0.9rem;
+      }
+
+      footer em {
+        font-style: normal;
+        color: var(--muted-color);
+      }
+
+      @media (max-width: 768px) {
+        article {
+          margin: 1rem;
+          border-radius: var(--border-radius);
+        }
+
+        header {
+          padding: 1.5rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        section {
+          padding: 1.5rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
+
+        img {
+          height: var(--img-height-mobile);
+        }
+
+        p {
+          font-size: 1rem;
+        }
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: var(--dark-bg);
+          color: var(--dark-text);
+        }
+
+        article {
+          background-color: var(--dark-card);
+        }
+
+        h2 {
+          color: var(--muted-color);
+        }
+
+        figcaption {
+          color: var(--muted-color);
+        }
+      }
+    </style>
+  </head>
+  <body></body>
+</html>
