@@ -13,33 +13,33 @@ export class FileService {
     );
   }
 
-  write(path: string, content: string): Result<void> {
-    console.info(`Zapisuję plik: ${path}`);
-    return this.handleOperation(() => {
-      const dir = path.substring(0, path.lastIndexOf("/"));
-
-      if (dir) fs.mkdirSync(dir, { recursive: true });
-
-      fs.writeFileSync(path, content, "utf-8");
-    }, "Błąd zapisu pliku");
+  writeFile(path: string, content: string): Result<void> {
+    return this.writeToFileSystem(path, content, "utf-8");
   }
 
   writeImage(path: string, content: Buffer): Result<void> {
-    console.info(`Zapisuję obraz: ${path}`);
-    return this.handleOperation(() => {
-      const dir = path.substring(0, path.lastIndexOf("/"));
-
-      if (dir) fs.mkdirSync(dir, { recursive: true });
-
-      fs.writeFileSync(path, content);
-    }, "Błąd zapisu obrazu");
+    return this.writeToFileSystem(path, content);
   }
 
+  // Tworzy katalog w podanej ścieżce, usuwając istniejący katalog, jeśli istnieje
   async ensureDirectory(dirPath: string): Promise<Result<void>> {
     return this.handleAsyncOperation(async () => {
       await fs.promises.rm(dirPath, { recursive: true, force: true });
       await fs.promises.mkdir(dirPath, { recursive: true });
     }, "Błąd tworzenia katalogu");
+  }
+
+  private writeToFileSystem(
+    path: string,
+    content: string | Buffer,
+    encoding?: BufferEncoding
+  ): Result<void> {
+    console.info(`Zapisuję plik: ${path}`);
+    return this.handleOperation(() => {
+      const dir = path.substring(0, path.lastIndexOf("/"));
+      if (dir) fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(path, content, encoding);
+    }, "Błąd zapisu pliku");
   }
 
   private handleOperation<T>(
