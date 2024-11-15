@@ -1,96 +1,48 @@
 import "dotenv/config";
-import { OpenAIService } from "./services/OpenAIService";
-import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
-import { CONVERT_TO_HTML, ENRICH_HTML_WITH_IMAGES } from "./prompts/prompts";
-import { Result } from "types";
-import { FileService } from "./services/FileService";
+import { processArticleWithGeneratedImages } from "./src/bonus-generating-images/bonus-image-generation";
+import {
+  convertArticleToHtml,
+  enrichHtmlWithImagePlaceholders,
+} from "./src/features/article-conversion/article-conversion";
+import { handleError, unwrap } from "./src/shared/utils";
+import { FileService } from "./src/services/FileService";
+import { APP_CONFIG } from "./config";
 
-const openai = new OpenAIService();
-const file = new FileService();
+const {
+  fullArticleWithGeneratedImages,
+  articleToHtml,
+  articleWithGeneratedImages,
+} = APP_CONFIG;
 
-const convertArticleToHtml = async (
-  rawArticle: string
-): Promise<Result<string>> => {
-  try {
-    console.log("Converting text into HTML...");
-    const messages: ChatCompletionMessageParam[] = [
-      { role: "system", content: CONVERT_TO_HTML },
-      { role: "user", content: rawArticle },
-    ];
+async function processArticle(): Promise<void> {
+  const fileService = new FileService();
+  const rawArticle = unwrap(fileService.read(articleToHtml.inputRawTextPath));
+  const convertedHtml = unwrap(await convertArticleToHtml(rawArticle));
+  const htmlWithImagePlaceholders = unwrap(
+    await enrichHtmlWithImagePlaceholders(convertedHtml)
+  );
 
-    const modelResponse = await openai.completion({ messages });
-    const convertedArticle = modelResponse.choices[0].message.content;
-
-    if (!convertedArticle) {
-      return { error: "No content received from OpenAI" };
-    }
-
-    console.log("Text converted successfully.");
-    return { data: convertedArticle };
-  } catch (error) {
-    return {
-      error: `Error while converting article: ${
-        error instanceof Error ? error.message : "Unknown error"
-      }`,
-    };
+  if (!fullArticleWithGeneratedImages) {
+    unwrap(
+      fileService.writeFile(
+        articleToHtml.htmlOutputPath,
+        htmlWithImagePlaceholders
+      )
+    );
+  } else {
+    unwrap(await processArticleWithGeneratedImages(htmlWithImagePlaceholders));
   }
-};
-
-const enrichHtmlWithImages = async (html: string): Promise<Result<string>> => {
-  try {
-    console.log("Enriching HTML with images...");
-    const messages: ChatCompletionMessageParam[] = [
-      { role: "system", content: ENRICH_HTML_WITH_IMAGES },
-      { role: "user", content: html },
-    ];
-
-    const modelResponse = await openai.completion({ messages });
-    const enrichedHtml = modelResponse.choices[0].message.content;
-
-    if (!enrichedHtml) {
-      return { error: "No content received from OpenAI" };
-    }
-
-    console.log("HTML enriched successfully.");
-    return { data: enrichedHtml };
-  } catch (error) {
-    return {
-      error: `Error while enriching HTML: ${
-        error instanceof Error ? error.message : "Unknown error"
-      }`,
-    };
-  }
-};
+}
 
 const main = async (): Promise<void> => {
-  const rawArticle = file.read("src/example_raw_article.txt");
-  if (!rawArticle.data) {
-    console.error(rawArticle.error);
-    return;
-  }
+  const outputDir = fullArticleWithGeneratedImages
+    ? articleWithGeneratedImages.htmlOutputPath
+    : articleToHtml.htmlOutputPath;
 
-  const convertedHtml = await convertArticleToHtml(rawArticle.data);
-  if (!convertedHtml.data) {
-    console.error(convertedHtml.error);
-    return;
-  }
+  await processArticle();
 
-  const htmlWithImages = await enrichHtmlWithImages(convertedHtml.data);
-  if (!htmlWithImages.data) {
-    console.error(htmlWithImages.error);
-    return;
-  }
-
-  const writeResult = file.write("src/artykul.html", htmlWithImages.data);
-  if (writeResult.error) {
-    console.error(writeResult.error);
-    return;
-  }
-
-  console.log("Process completed successfully!");
+  console.log("\nProces zakończony pomyślnie!");
+  console.log(`Rezultat znajdziesz w ${outputDir}`);
 };
 
-main().catch((error) => {
-  console.error("Unhandled error:", error);
-  process.exit(1);
-});
+main().catch(handleError);
