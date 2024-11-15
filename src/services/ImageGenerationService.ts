@@ -12,30 +12,24 @@ export class ImageGenerationService {
     prompt: string,
     index: number
   ): Promise<Result<string>> {
-    const imageResult = await this.generateImage(prompt);
+    const imageResult = await this.openAIService.imageGeneration({ prompt });
     if (!imageResult.data) {
       return {
         error: imageResult.error || "Brak danych wygenerowanego obrazu",
       };
     }
 
-    return this.downloadImage(imageResult.data, index);
-  }
-
-  private async generateImage(prompt: string): Promise<Result<string>> {
-    const response = await this.openAIService.imageGeneration({ prompt });
-    if (response.error) {
-      return { error: `Błąd generowania obrazu: ${response.error}` };
-    }
-
-    const imageUrl = response.data?.data[0]?.url;
+    const imageUrl = imageResult.data.data[0]?.url;
     if (!imageUrl) {
       return { error: "Nie otrzymano URL-a wygenerowanego obrazu" };
     }
 
-    return { data: imageUrl };
+    const result = this.downloadImage(imageUrl, index);
+
+    return result;
   }
 
+  // Pobiera i zapisuje obrazek w ścieżce podanej w APP_CONFIG
   private async downloadImage(
     imageUrl: string,
     index: number
