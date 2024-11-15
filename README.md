@@ -2,16 +2,16 @@
 
 ## 📑 Spis treści
 
-1. [Opis projektu](#🚀-opis-projektu)
-2. [Funkcjonalności](#🔧-funkcjonalności)
+1. [Opis projektu](#-opis-projektu)
+2. [Funkcjonalności](#-funkcjonalności)
    - [Podstawowe wymagania](#podstawowe-wymagania)
    - [Bonusowa funkcjonalność](#bonusowa-funkcjonalność)
-3. [Technologie](#🛠️-technologie)
-4. [Instrukcja uruchomienia](#📝-instrukcja-uruchomienia)
-5. [Możliwości rozwoju](#📈-możliwości-rozwoju)
-6. [Struktura projektu](#📂-struktura-projektu)
-7. [Uwagi](#📝-uwagi)
-8. [Podziękowania](#🤝-podziękowania)
+3. [Technologie](#-technologie)
+4. [Instrukcja uruchomienia](#-instrukcja-uruchomienia)
+5. [Możliwości rozwoju](#-możliwości-rozwoju)
+6. [Struktura projektu](#-struktura-projektu)
+7. [Uwagi](#-uwagi)
+8. [Podziękowania](#-podziękowania)
 
 ## 🚀 Opis projektu
 
