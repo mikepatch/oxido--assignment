@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 
 export type Result<T> = {
   data?: T;
@@ -36,3 +37,22 @@ export type AppConfig = {
   articleToHtml: ConvertArticleToHtmlConfig;
   articleWithGeneratedImages: ConvertArticleWithGeneratedImagesConfig;
 };
+
+export type CompletionConfig = {
+  messages: ChatCompletionMessageParam[];
+  model?: OpenAI.ChatModel;
+};
+
+export type ImageConfig = {
+  prompt: string;
+  model?: OpenAI.ImageModel;
+  size?: OpenAI.ImageEditParams["size"] | "1792x1024";
+};
+
+export type RetryConfig = {
+  maxAttempts: number;
+  delayMs: number;
+  backoffFactor: number;
+};
+
+export type RetryOptions = Partial<RetryConfig>;

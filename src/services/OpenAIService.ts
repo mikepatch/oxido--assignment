@@ -1,25 +1,11 @@
 import OpenAI from "openai";
-import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
-import { Result } from "../shared/types";
-
-type CompletionConfig = {
-  messages: ChatCompletionMessageParam[];
-  model?: OpenAI.ChatModel;
-};
-
-type ImageConfig = {
-  prompt: string;
-  model?: OpenAI.ImageModel;
-  size?: OpenAI.ImageEditParams["size"] | "1792x1024";
-};
-
-type RetryConfig = {
-  maxAttempts: number;
-  delayMs: number;
-  backoffFactor: number;
-};
-
-type RetryOptions = Partial<RetryConfig>;
+import {
+  CompletionConfig,
+  ImageConfig,
+  Result,
+  RetryConfig,
+  RetryOptions,
+} from "../shared/types";
 
 export class OpenAIService {
   private openai: OpenAI;
@@ -116,10 +102,12 @@ export class OpenAIService {
 
     this.requestTimestamps.push(now);
   }
+
   /**
-   * Ta logika jest przydatna kiedy dostaniemy error od OpenAI,
-   * dzięki mechanizmowi retry możemy ponowić zapytanie (z informacją),
-   * a po osiągnięciu limitu liczby zapytań rzucamy błędem.
+   * Ta logika jest przydatna kiedy dostaniemy error od OpenAI.
+   * Generalnie OpenAI API posiada własny system retry, ale
+   * dzięki temu mechanizmowi możemy dodatkowo zwiększyć kontrolę
+   * oraz zabezpieczyć aplikację.
    */
   private async withRetry<T>(
     operation: () => Promise<T>,
@@ -138,7 +126,7 @@ export class OpenAIService {
           const delay =
             config.delayMs * Math.pow(config.backoffFactor, attempt - 1);
 
-          console.log(
+          console.error(
             `Błąd API OpenAI (próba ${attempt}/${config.maxAttempts}): ${lastError.message}. Ponowna próba za ${delay}ms`
           );
 

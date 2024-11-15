@@ -35,7 +35,7 @@ export class FileService {
     content: string | Buffer,
     encoding?: BufferEncoding
   ): Result<void> {
-    console.info(`Zapisuję plik: ${path}`);
+    console.log(`Zapisuję plik: ${path}`);
     return this.handleOperation(() => {
       const dir = path.substring(0, path.lastIndexOf("/"));
       if (dir) fs.mkdirSync(dir, { recursive: true });
