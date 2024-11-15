@@ -35,4 +35,4 @@ USER: Article where a paragraph has complex content without clear section headli
 AI: <article><section><p>Complex content without clear section headline to be preserved exactly as provided.</p></section></article>
 </prompt_examples>
 
-Ensure all characters, including special symbols like asterisks, are precisely reproduced in the output, with no interpretation as markup unless explicitly instructed otherwise.`;
+Ensure all characters, including special symbols like asterisks, are precisely reproduced in the output, with no interpretation as markup.`;
