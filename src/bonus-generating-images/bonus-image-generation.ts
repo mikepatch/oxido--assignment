@@ -18,7 +18,7 @@ export const processArticleWithGeneratedImages = async (
       return { error: processedHtmlResult.error ?? "Brak wygenerowanego HTML" };
     }
 
-    const writeResult = fileService.write(
+    const writeResult = fileService.writeFile(
       APP_CONFIG.articleWithGeneratedImages.htmlOutputPath,
       processedHtmlResult.data
     );
