@@ -14,7 +14,7 @@ const {
   articleWithGeneratedImages,
 } = APP_CONFIG;
 
-async function processArticle(): Promise<void> {
+const processArticle = async (): Promise<void> => {
   const fileService = new FileService();
   const rawArticle = unwrap(fileService.read(articleToHtml.inputRawTextPath));
   const convertedHtml = unwrap(await convertArticleToHtml(rawArticle));
@@ -32,7 +32,7 @@ async function processArticle(): Promise<void> {
   } else {
     unwrap(await processArticleWithGeneratedImages(htmlWithImagePlaceholders));
   }
-}
+};
 
 const main = async (): Promise<void> => {
   const outputDir = fullArticleWithGeneratedImages
