@@ -34,6 +34,7 @@ Witaj w repozytorium mojego rozwiązania zadania rekrutacyjnego dla firmy Oxido.
 - **Generowanie obrazów**: Dzięki integracji z modelem DALL-E, aplikacja generuje pełną wersję artykułu wzbogaconą o obrazy wygenerowane na podstawie kontekstu danego fragmentu artykułu.
 
   - Obrazy są zapisywane w katalogu `images`, który jest tworzony lub odświeżany po każdym uruchomieniu aplikacji.
+  - **Automatyczna zamiana obrazów**: W pliku `artykul.html`, wszystkie wystąpienia `image_placeholder.jpg` są automatycznie zamieniane na odpowiednie nazwy plików, takie jak `image-0.webp` zgodne z katalogiem `images/`.
   - Funkcjonalność ta jest opcjonalna i może być włączona w konfiguracji.
 
 - **Automatyczna aktualizacja**: Katalog `images` oraz plik `artykul.html` są automatycznie aktualizowane przy każdym uruchomieniu aplikacji z aktywną opcją konfiguracyjną `enableBonusGeneratedImages`.
