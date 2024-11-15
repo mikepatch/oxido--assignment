@@ -23,9 +23,14 @@ type RetryOptions = Partial<RetryConfig>;
 
 export class OpenAIService {
   private openai: OpenAI;
+  private imageRateLimit = {
+    maxRequests: 5,
+    windowMs: 60000,
+  };
+  private requestTimestamps: number[] = [];
   private defaultRetryConfig: RetryConfig = {
-    maxAttempts: 3,
-    delayMs: 1000,
+    maxAttempts: 5,
+    delayMs: 2000,
     backoffFactor: 2,
   };
 
@@ -57,6 +62,8 @@ export class OpenAIService {
     model = "dall-e-3",
     size = "1024x1024",
   }: ImageConfig): Promise<Result<OpenAI.Images.ImagesResponse>> {
+    await this.ensureRateLimit();
+
     return this.handleRequest(
       () =>
         this.withRetry(() =>
@@ -89,6 +96,31 @@ export class OpenAIService {
     }
   }
 
+  /**
+   * OpenAI API ma limity na liczbę reqestów do generowania obrazków,
+   * dlatego dodałem poniższy mechanizm, żeby zapewnić,
+   * generowanie obrazków dla dłuższych artykułów.
+   */
+  private async ensureRateLimit() {
+    const now = Date.now();
+    this.requestTimestamps = this.requestTimestamps.filter(
+      (timestamp) => now - timestamp < this.imageRateLimit.windowMs
+    );
+
+    if (this.requestTimestamps.length >= this.imageRateLimit.maxRequests) {
+      const oldestRequest = this.requestTimestamps[0];
+      const waitTime = this.imageRateLimit.windowMs - (now - oldestRequest);
+
+      await new Promise((resolve) => setTimeout(resolve, waitTime));
+    }
+
+    this.requestTimestamps.push(now);
+  }
+  /**
+   * Ta logika jest przydatna kiedy dostaniemy error od OpenAI,
+   * dzięki mechanizmowi retry możemy ponowić zapytanie (z informacją),
+   * a po osiągnięciu limitu liczby zapytań rzucamy błędem.
+   */
   private async withRetry<T>(
     operation: () => Promise<T>,
     options: RetryOptions = {}
@@ -102,24 +134,35 @@ export class OpenAIService {
       } catch (error) {
         lastError = error as Error;
 
-        if (error instanceof OpenAI.APIError) {
-          if (
-            error.status === 429 &&
-            !error.message.includes("exceeded your current quota")
-          ) {
-            const delay =
-              config.delayMs * Math.pow(config.backoffFactor, attempt - 1);
-            console.warn(
-              `Przekroczono limit zapytań, oczekiwanie ${delay}ms przed ponowną próbą ${attempt}/${config.maxAttempts}`
-            );
-            await new Promise((resolve) => setTimeout(resolve, delay));
-            continue;
-          }
+        if (this.isRetryableError(error) && attempt < config.maxAttempts) {
+          const delay =
+            config.delayMs * Math.pow(config.backoffFactor, attempt - 1);
+
+          console.log(
+            `Błąd API OpenAI (próba ${attempt}/${config.maxAttempts}): ${lastError.message}. Ponowna próba za ${delay}ms`
+          );
+
+          await new Promise((resolve) => setTimeout(resolve, delay));
+
+          continue;
         }
         throw error;
       }
     }
-
     throw lastError || new Error("Osiągnięto maksymalną liczbę prób");
+  }
+
+  private isRetryableError(error: unknown): boolean {
+    if (!(error instanceof OpenAI.APIError)) {
+      return true;
+    }
+
+    const status = error.status || 0;
+
+    if (status === 429) {
+      return true;
+    }
+
+    return ![400, 401].includes(status);
   }
 }
