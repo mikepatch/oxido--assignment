@@ -35,8 +35,4 @@ export type AppConfig = {
   fullArticleWithGeneratedImages: boolean;
   articleToHtml: ConvertArticleToHtmlConfig;
   articleWithGeneratedImages: ConvertArticleWithGeneratedImagesConfig;
-  openai: {
-    models: { completion: OpenAI.ChatModel; image: OpenAI.ImageModel };
-    imageSize: OpenAI.ImageEditParams["size"] | "1792x1024";
-  };
 };
