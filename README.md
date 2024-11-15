@@ -1,6 +1,4 @@
-[DOCUMENTATION] 📄 README.md Draft:
-
-# Projekt OXIDO
+# Zadanie rekrutacyjne – Oxido
 
 ## 📑 Spis treści
 
