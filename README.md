@@ -38,9 +38,9 @@ Witaj w repozytorium mojego rozwiązania zadania rekrutacyjnego dla firmy Oxido.
 - **Automatyczna aktualizacja**: Katalog `images` oraz plik `artykul.html` są automatycznie aktualizowane przy każdym uruchomieniu aplikacji z aktywną opcją konfiguracyjną `enableBonusGeneratedImages`.
 - **Połączenie klasycznego programowania i LLM**: W tym rozwiązaniu zastosowałem połączenie tradycyjnych technik programistycznych z wykorzystaniem modeli językowych (LLM), co pozwala na efektywne przetwarzanie i wzbogacanie treści artykułów.
 
-**Zachęcam do uruchomienia i przetestowania tej funkcjonalności 😊** (orientacyjne koszty rozpisane są w sekcji [Uwagi](#📝-uwagi)).
+**Zachęcam do uruchomienia i przetestowania tej funkcjonalności 😊** (orientacyjne koszty rozpisane są w sekcji [Uwagi](#-uwagi)).
 
-## 🛠️ Technologie
+## 🤖 Technologie
 
 - **TypeScript**: Główny język programowania użyty w projekcie.
 - **OpenAI API**: Wykorzystane do przetwarzania tekstu i generowania obrazów.
