@@ -9,7 +9,7 @@ import { FileService } from "./src/services/FileService";
 import { APP_CONFIG } from "./config";
 
 const {
-  fullArticleWithGeneratedImages,
+  enableBonusGeneratedImages,
   articleToHtml,
   articleWithGeneratedImages,
 } = APP_CONFIG;
@@ -22,7 +22,7 @@ const processArticle = async (): Promise<void> => {
     await enrichHtmlWithImagePlaceholders(convertedHtml)
   );
 
-  if (!fullArticleWithGeneratedImages) {
+  if (!enableBonusGeneratedImages) {
     unwrap(
       fileService.writeFile(
         articleToHtml.htmlOutputPath,
@@ -35,7 +35,7 @@ const processArticle = async (): Promise<void> => {
 };
 
 const main = async (): Promise<void> => {
-  const outputDir = fullArticleWithGeneratedImages
+  const outputDir = enableBonusGeneratedImages
     ? articleWithGeneratedImages.htmlOutputPath
     : articleToHtml.htmlOutputPath;
 

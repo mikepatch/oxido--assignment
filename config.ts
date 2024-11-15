@@ -1,8 +1,8 @@
 import { AppConfig } from "./src/shared/types";
 
-// *Ustawienie "fullArticleWithGeneratedImages = true" zwiększy koszt ze względu na wykorzystanie modelu do generowania obrazów (0.18$ - 0.23$ przy 4-5 obrazkach)
+// *Ustawienie "enableBonusGeneratedImages = true" zwiększy koszt ze względu na wykorzystanie modelu do generowania obrazów (0.18$ - 0.23$ przy 4-5 obrazkach)
 export const APP_CONFIG: AppConfig = {
-  fullArticleWithGeneratedImages: true, // *UWAGA! true = wyższy koszt
+  enableBonusGeneratedImages: false, // *UWAGA! true = wyższy koszt
   articleToHtml: {
     inputRawTextPath: "src/example_raw_article.txt",
     htmlOutputPath: "src/solution/artykul.html",

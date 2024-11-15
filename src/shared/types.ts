@@ -33,7 +33,7 @@ export type ImagePrompt = {
 };
 
 export type AppConfig = {
-  fullArticleWithGeneratedImages: boolean;
+  enableBonusGeneratedImages: boolean;
   articleToHtml: ConvertArticleToHtmlConfig;
   articleWithGeneratedImages: ConvertArticleWithGeneratedImagesConfig;
 };
