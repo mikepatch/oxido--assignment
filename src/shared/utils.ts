@@ -3,6 +3,7 @@ export const handleError = (error: unknown): never => {
   process.exit(1);
 };
 
+// Wzorzec Result Pattern – rozpakowuje obiekt rezultatu, zwracając dane lub rzucając wyjątek w przypadku błędu
 export const unwrap = <T>(
   result: { data?: T; error?: string },
   context?: string

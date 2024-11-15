@@ -29,6 +29,7 @@ export class FileService {
     }, "Błąd tworzenia katalogu");
   }
 
+  // Abstrakcja obsługująca zapisywanie plików
   private writeToFileSystem(
     path: string,
     content: string | Buffer,
