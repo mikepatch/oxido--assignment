@@ -11,6 +11,7 @@ type OperationConfig = {
   operation: string;
 };
 
+// Abstrakcja do komunikacji z OpenAI, żeby nie powielać kodu (DRY)
 const processWithOpenAI = async (
   content: string,
   { prompt, operation }: OperationConfig

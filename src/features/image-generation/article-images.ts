@@ -7,10 +7,12 @@ import { ImageGenerationService } from "../../services/ImageGenerationService";
 import { Result } from "../../shared/types";
 import { FileService } from "../../services/FileService";
 
+// Generuje obrazy na podstawie podanych promptów i zwraca ich ścieżki
 const generateImages = async (
   imagePrompts: Array<{ alt: string; index: number }>
 ): Promise<Result<string[]>> => {
   console.log("Generuję obrazy...");
+
   const imageService = new ImageGenerationService(
     APP_CONFIG.articleWithGeneratedImages
   );
@@ -21,6 +23,8 @@ const generateImages = async (
     )
   );
 
+  //Filtruje wyniki, żeby zostawić tylko te z danymi,
+  // a następnie wyciąga z nich ścieżki do obrazków.
   const validPaths = results
     .filter(
       (result): result is Result<string> & { data: string } =>
